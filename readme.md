@@ -1,13 +1,10 @@
-# Subscribe plugin for Craft
+# Subscribe plugin for Craft CMS
 
-Subscribe to mailing list software on craft user registration activation for front end and / or cp requests.
+Subscribe to mailing list software on craft user registration or activation for front end and/or cp requests.
 
 Currently supports:
 
 * Mailchimp
-
-NB. If you have serveices that you would like to add just shout, so long as they have a decent robust API we will look to get them added.
-
 
 Plugin settings allow you to:
 
@@ -17,13 +14,15 @@ Plugin settings allow you to:
 * Mailchimp specific settings: Double Opt In, Welcome Email, Update Existing Subscriptions
 
 
+_NB. If you have services that you would like to add, just shout, so long as they have a decent robust API we will look to get them added._
+
 ## Installation
 
 To install Subscribe, follow these steps:
 
 1.  Upload the fruitsubscribe/ folder to your craft/plugins/ folder.
 2.  Go to Settings > Plugins from your Craft control panel and install the Subscribe plugin.
-3.  Hit Subscribe, switch it on and set it up.
+3.  Hit Subscribe, switch on the services you need and set them up.
 
 
 ## Roadmap
