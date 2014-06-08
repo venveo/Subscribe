@@ -1,0 +1,94 @@
+{% import "_includes/forms" as forms %}
+
+<h2 class="first">Subscribe Settings</h2>
+
+<div class="fruit-toggle" data-toggle="#settings-mailchimpSubscribeSettings">
+
+	{#
+	{{ forms.selectField({
+		label: "Mailchimp Subscribe"|t,
+		instructions: "Enable mailchimp subscription on registration"|t,
+		id: 'mailchimpActive',
+		name: 'mailchimpActive',
+		options: {
+			'0' : 'Off', 
+			'1' : 'On'
+		},
+		value: settings.mailchimpActive
+	}) }}
+	#}
+
+	{{ forms.lightswitchField({
+		label: "Mailchimp Subscription"|t,
+		id: 'mailchimpActive',
+		name: 'mailchimpActive',
+		instructions: "Enable mailchimp subscription on user registration"|t,
+		on: settings.mailchimpActive,
+	}) }}
+
+</div>
+
+
+<div id="mailchimpSubscribeSettings" class="fruit-settings{{ settings.mailchimpActive ?: ' hidden' }}">
+
+	{{ forms.textField({
+		label: "Mailchimp API Key"|t,
+		id: 'mailchimpApiKey',
+		name: 'mailchimpApiKey',
+		instructions: "Get your Mailchimp API key and enter it here."|t,
+		value: settings.mailchimpApiKey,
+		errors: settings.getErrors('mailchimpApiKey')
+	}) }}
+
+	{{ forms.textField({
+		label: "Mailchimp List ID"|t,
+		id: 'mailchimpListId',
+		name: 'mailchimpListId',
+		instructions: "Add the Mailchimp list ID that you would like users subscibed to."|t,
+		value: settings.mailchimpListId,
+		errors: settings.getErrors('mailchimpListId')
+	}) }}
+
+	{{ forms.selectField({
+		label: "Mailchimp Event"|t,
+		instructions: "Select which event you would like to trigger subscrition."|t,
+		id: 'mailchimpEvent',
+		name: 'mailchimpEvent',
+		options: {
+			'users.onActivateUser': 'User Activation', 
+			'users.onSaveUser': 'User Registration'
+		},
+		value: settings.mailchimpEvent
+	}) }}
+
+	{{ forms.selectField({
+		label: "Mailchimp Request"|t,
+		instructions: "Select which requests you would like the subcription to be triggered for."|t,
+		id: 'mailchimpRequest',
+		name: 'mailchimpRequest',
+		options: {
+			'*': 'CP & Front End Requests', 
+			'cp': 'CP Requests Only', 
+			'fe': 'Front End Requests Only'
+		},
+		value: settings.mailchimpRequest
+	}) }}
+
+	{% set config = {
+		label: "Mailchimp Subscription Options"|t,
+		instructions: "Mailchimp subscription settings."|t,
+		id: 'mailchimpOptions',
+		name: 'mailchimpOptions',
+		options: {
+			'double_optin': 'Double Opt In', 
+			'send_welcome': 'Send Welcome Email', 
+			'update_existing': 'Update Existing Subscription'
+		},
+		values: settings.mailchimpOptions
+	} %}	
+
+	{{ forms.field(config, forms.checkboxGroup(config)) }}
+
+</div>
+
+<hr>
