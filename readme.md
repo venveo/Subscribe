@@ -1,4 +1,6 @@
-# Subscribe plugin for Craft CMS
+# Subscribe
+
+# User subscription plugin for Craft CMS
 
 Subscribe to mailing list software on craft user registration or activation for front end and/or cp requests.
 
