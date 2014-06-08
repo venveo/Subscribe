@@ -24,6 +24,9 @@ To install Subscribe, follow these steps:
 2.  Go to Settings > Plugins from your Craft control panel and install the Subscribe plugin.
 3.  Hit Subscribe, switch on the services you need and set them up.
 
+## Requirements
+
+Craft CMS Version 2.1+
 
 ## Roadmap
 
