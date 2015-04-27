@@ -26,7 +26,7 @@ class FruitSubscribe_PluginSettingsModel extends BaseModel
             'mailchimpListId' => AttributeType::String,
             'mailchimpEvent' => array(AttributeType::Enum, 'required' => true, 'values' => array('users.onSaveUser', 'users.onActivateUser'), 'default' => 'users.onActivateUser'),
             'mailchimpRequest' => AttributeType::Mixed,
-            'mailchimpOptions' => AttributeType::Mixed,
+            'mailchimpOptions' => AttributeType::Mixed
         );
     }
 

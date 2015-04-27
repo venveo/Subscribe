@@ -27,7 +27,7 @@ class FruitSubscribePlugin extends BasePlugin
      */
     function getVersion()
 	{
-		return '0.9';
+		return '0.9.1';
 	}
 
     /**
@@ -63,11 +63,19 @@ class FruitSubscribePlugin extends BasePlugin
 		));
 	}
 
+	public function getPluginHandle()
+	{
+		return StringHelper::toLowerCase($this->classHandle);
+	}
+
+	public function pluginLog($message = '', $level = LogLevel::Info)
+	{
+		Craft::log(__METHOD__.' : '.$message, $level, true, 'application', $this->classHandle);
+	}
+
 
 	public function init() 
 	{
-
-		Craft::log(__METHOD__, LogLevel::Info, true);
 
 		$settings = $this->getSettings();
 
@@ -78,13 +86,16 @@ class FruitSubscribePlugin extends BasePlugin
 				
 				$settings = craft()->plugins->getPlugin('fruitsubscribe')->getSettings();
 				
+				// User Override
+				$subscribeStoppedByUser = craft()->request->getPost('subscribeConfimation', false) == 0 ? true : false;
+
 				// Check request, for cp, fe or both
 				$subscribeRequestCp = craft()->request->isCpRequest() && ( $settings['mailchimpRequest'] == '*' || $settings['mailchimpRequest'] == 'cp' ) ? true : null;
 				$subscribeRequestFe = !craft()->request->isCpRequest() && ( $settings['mailchimpRequest'] == '*' || $settings['mailchimpRequest'] == 'fe' ) ? true : null;
 
+
 				if( $subscribeRequestCp || $subscribeRequestFe )
 				{
-
 					switch($settings['mailchimpEvent'])
 					{
 						case('users.onSaveUser'):
@@ -102,26 +113,33 @@ class FruitSubscribePlugin extends BasePlugin
 
 					if($user)
 					{
-
-						$result = craft()->fruitSubscribe->mailchimpSubscribeUser($user);
-
-						if($result['subscribed'])
+						if($subscribeStoppedByUser)
 						{
-							craft()->userSession->setNotice($result['notice']);
-							Craft::log(__METHOD__.' : '.$user->fullName.' - '.$result['notice'], LogLevel::Info, true);
+							craft()->userSession->setError('Subscribe Stopped by User');
+							$this->pluginLog('Subscribe Stopped by User - '.$user->fullName.' ('.$user->email.')', LogLevel::Info);
 						}
 						else
-						{
-							craft()->userSession->setError($result['notice']);
-							Craft::log(__METHOD__.' : '.$user->fullName.' - '.$result['error'], LogLevel::Error, true);
-						}
+						{						
+							$result = craft()->fruitSubscribe->mailchimpSubscribeUser($user);
 
+							if($result['subscribed'])
+							{
+								craft()->userSession->setNotice($result['notice']);
+								$this->pluginLog($user->fullName.' ('.$user->email.') - '.$result['notice'], LogLevel::Info);
+
+							}
+							else
+							{
+								craft()->userSession->setError($result['notice']);
+								$this->pluginLog($user->fullName.' ('.$user->email.') - '.$result['error'], LogLevel::Error);
+							}
+						}
 					}
 
 				}
 				else
 				{
-					Craft::log(__METHOD__.' : Mailchimp subscribe not active for this request or missing your api key or list ID', LogLevel::Info, true);
+					$this->pluginLog('Mailchimp subscribe not active for this request or missing your api key or list ID', LogLevel::Info);
 				}
 			
 			});

@@ -14,6 +14,16 @@ namespace Craft;
 
 class FruitSubscribeService extends BaseApplicationComponent
 {
+
+    protected $plugin;
+    protected $pluginHandle;
+
+    public function __construct()
+    {    
+        $this->plugin = craft()->plugins->getPlugin('fruitsubscribe');
+        $this->pluginHandle = $this->plugin->getPluginHandle();
+    }
+
     public function mailchimpSubscribeUser($user)
     {        
         $settings = craft()->plugins->getPlugin('fruitsubscribe')->getSettings();
